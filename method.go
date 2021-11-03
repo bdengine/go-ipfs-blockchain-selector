@@ -1,7 +1,7 @@
 package selector
 
 import (
-	"github.com/ipfs/go-ipfs-auth/standard"
+	standard "github.com/ipfs/go-ipfs-auth/standard/model"
 )
 
 func NewPeer(pid string) (*standard.Peer, error) {
@@ -9,7 +9,6 @@ func NewPeer(pid string) (*standard.Peer, error) {
 }
 
 func ResponseApply(cid string, pid string) (*standard.Apply, error) {
-
 	return authApi.ResponseApply(cid, pid)
 }
 

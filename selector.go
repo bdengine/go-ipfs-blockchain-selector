@@ -2,7 +2,7 @@ package selector
 
 import (
 	"github.com/ipfs/go-ipfs-auth/auth-source-fabric/api"
-	"github.com/ipfs/go-ipfs-auth/standard"
+	standard "github.com/ipfs/go-ipfs-auth/standard/interface"
 )
 
 const (
