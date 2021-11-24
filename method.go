@@ -8,6 +8,14 @@ func NewPeer(pid string) (*standard.Peer, error) {
 	return authApi.NewPeer(pid)
 }
 
+func IsCorePeer(pid string) bool {
+	peer, _ := authApi.GetPeer(pid)
+	if peer.Role == standard.RoleCore {
+		return true
+	}
+	return false
+}
+
 func ResponseApply(cid string, pid string) (*standard.Apply, error) {
 	return authApi.ResponseApply(cid, pid)
 }
@@ -53,8 +61,8 @@ func FindPeerReadingHistory() ([]string, error) {
 }
 
 // NewIpfs 新增ipfs文件权限信息
-func NewIpfsFilePermission(cid string, state int) (*standard.IpfsFileInfo, error) {
-	return authApi.NewIpfsFilePermission(cid, state)
+func NewIpfsFilePermission(cid string, encryptCid string, uuid []byte, secretKey []byte, state int) (*standard.IpfsFileInfo, error) {
+	return authApi.NewIpfsFilePermission(cid, encryptCid, uuid, secretKey, state)
 }
 
 // Share 分享文件
@@ -76,6 +84,10 @@ func ApplyIpfsRemote(cid string) (*standard.Apply, error) {
 
 func ApplyIpfsLocal(cid string) (string, error) {
 	return authApi.ApplyIpfsLocal(cid)
+}
+
+func GetFileInfo(cid string) (string, string, error) {
+	return authApi.GetFileInfo(cid)
 }
 
 // ParseState 解析状态

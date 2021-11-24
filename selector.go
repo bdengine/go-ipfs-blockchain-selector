@@ -14,20 +14,20 @@ const (
 	RoleLite = "lite"
 )
 
-var defaultAuthWay, defaultRole = AuthWayFabric, RoleLite
+var DefaultAuthWay, DefaultRole = AuthWayFabric, RoleLite
 
 var authApi standard.AuthAPI
 
 func Initialization(url string, authWay string, role string) error {
 	if authWay == "" {
-		authWay = defaultAuthWay
+		authWay = DefaultAuthWay
 	} else {
-		defaultAuthWay = authWay
+		DefaultAuthWay = authWay
 	}
 	if role == "" {
-		role = defaultRole
+		role = DefaultRole
 	} else {
-		defaultRole = role
+		DefaultRole = role
 	}
 
 	switch authWay {
