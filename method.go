@@ -1,114 +1,67 @@
 package selector
 
 import (
-	standard "github.com/ipfs/go-ipfs-auth/standard/model"
+	"github.com/ipfs/go-ipfs-auth/standard/model"
 )
 
-func NewPeer(pid string) (*standard.Peer, error) {
-	return authApi.NewPeer(pid)
-}
-
-func IsCorePeer(pid string) bool {
-	peer, _ := authApi.GetPeer(pid)
-	if peer.Role == standard.RoleCore {
-		return true
+func GetPeerList() ([]model.CorePeer, error) {
+	get, exist := api.goCache.Get(peerListKey)
+	if !exist {
+		list, err := api.GetPeerList()
+		if err != nil {
+			return nil, err
+		}
+		err = api.goCache.Add(peerListKey, list, cacheExpire)
+		return list, err
 	}
-	return false
+	return get.([]model.CorePeer), nil
 }
 
-func ResponseApply(cid string, pid string) (*standard.Apply, error) {
-	return authApi.ResponseApply(cid, pid)
+func AddFile(info model.IpfsFileInfo) error {
+	return api.AddFile(info)
 }
 
-func GetServerList() ([]standard.CorePeer, error) {
-	return authApi.GetServerList()
+func DeleteFile(info string) error {
+	return api.DeleteFile(info)
 }
 
-func ApplyJoinServerNet(addresses []string) error {
-	return authApi.ApplyJoinServerNet(addresses)
+func InitPeer(peer model.CorePeer) error {
+	return api.InitPeer(peer)
 }
 
-func AuthJoinApply(pid string, i int) (standard.JoinServerListApply, error) {
-	return authApi.AuthJoinApply(pid, i)
+func ReportContribute(num int64) error {
+	return nil
 }
 
-func JoinServerNet() ([]standard.Peer, error) {
-	return authApi.JoinServerNet()
+func GetUserCode() (string, error) {
+	return api.GetUserCode()
 }
 
-func GetApply(peerId string) ([]standard.JoinServerListApply, error) {
-	return authApi.GetApply(peerId)
+func GetPeer(id string) (model.CorePeer, error) {
+	return api.GetPeer(id)
 }
 
-// 获取文件权限信息
-func FindFileAuth(cid string) (*standard.Apply, error) {
-	return authApi.FindFileAuth(cid)
+func GetChallenge() (string, error) {
+	return api.GetChallenge()
 }
 
-// 获取已拥有文件列表
-func FindFileList(pid string) ([]string, error) {
-	return authApi.FindFileList(pid)
+func Mining(m []model.IpfsMining) error {
+	return api.Mining(m)
 }
 
-// 获取文件阅读者列表
-func FindFileReaderList(cid string) ([]string, error) {
-	return authApi.FindFileReaderList(cid)
-}
-
-// 获取节点阅读历史
-func FindPeerReadingHistory() ([]string, error) {
-	return authApi.FindPeerReadingHistory()
-}
-
-// NewIpfs 新增ipfs文件权限信息
-func NewIpfsFilePermission(cid string, encryptCid string, uuid []byte, secretKey []byte, state int) (*standard.IpfsFileInfo, error) {
-	return authApi.NewIpfsFilePermission(cid, encryptCid, uuid, secretKey, state)
-}
-
-// Share 分享文件
-func Share(cid string, pid string, limit standard.Limit) (*standard.IpfsFileInfo, error) {
-	return authApi.Share(cid, pid, limit)
-}
-
-func Change(cid string, ipfs standard.IpfsFileInfo) (*standard.IpfsFileInfo, error) {
-	return authApi.Change(cid, ipfs)
-}
-
-func Delete(cid string) error {
-	return authApi.Delete(cid)
-}
-
-func ApplyIpfsRemote(cid string) (*standard.Apply, error) {
-	return authApi.ApplyIpfsRemote(cid)
-}
-
-func ApplyIpfsLocal(cid string) (string, error) {
-	return authApi.ApplyIpfsLocal(cid)
-}
-
-func GetFileInfo(cid string) (string, string, error) {
-	return authApi.GetFileInfo(cid)
-}
-
-// ParseState 解析状态
-func ParseState(state uint8) (readType uint8, shareType uint8, noticeType uint8, authType uint8, err error) {
-	authType = state & 3
-	if authType == 3 {
-		err = errWrongAuthType
-		return
+func GetBootStrap() ([]string, error) {
+	boot, exist := api.goCache.Get(bootstrapListKey)
+	if !exist {
+		list, err := GetPeerList()
+		if err != nil {
+			return nil, err
+		}
+		var blist []string
+		for _, peer := range list {
+			blist = append(blist, peer.Addresses...)
+		}
+		err = api.goCache.Add(bootstrapListKey, blist, cacheExpire)
+		return blist, nil
 	}
-	state >>= 2
-	noticeType = state & 3
-	state >>= 2
-	shareType = state & 3
-	state >>= 2
-	readType = state & 3
-	return
-}
-
-func GetState(readType uint8, shareType uint8, noticeType uint8, authType uint8) (uint8, error) {
-	if readType > 3 || shareType > 3 || noticeType > 3 || authType > 2 {
-		return 0, errWrongState
-	}
-	return authType + noticeType<<2 + shareType<<4 + readType<<6, nil
+	return boot.([]string), nil
 }

@@ -1,47 +1,78 @@
 package selector
 
 import (
-	"github.com/ipfs/go-ipfs-auth/auth-source-fabric/api"
-	standard "github.com/ipfs/go-ipfs-auth/standard/interface"
+	"fmt"
+	"github.com/ipfs/go-ipfs-auth/auth-source-eth/implement"
+	"github.com/ipfs/go-ipfs-auth/selector/mock"
+	_interface "github.com/ipfs/go-ipfs-auth/standard/interface"
+	"github.com/patrickmn/go-cache"
+	"time"
 )
 
 const (
 	AuthWayFabric = "fabric"
 )
 
+var errInitFail error = fmt.Errorf("权限模块初始化失败")
+
+type BlockchainAPI struct {
+	_interface.Peer
+	goCache *cache.Cache
+}
+
+var api *BlockchainAPI
+
 const (
-	RoleCore = "core"
-	RoleLite = "lite"
+	cacheExpire      = 2 * time.Hour
+	cacheClean       = 1 * time.Hour
+	peerListKey      = "keyPeerList"
+	bootstrapListKey = "keyBootstrap"
 )
 
-var DefaultAuthWay, DefaultRole = AuthWayFabric, RoleLite
+const (
+	sourceFabric = "fabric"
+	sourceCosmos = "cosmos"
+	sourceMock   = "mock"
+)
 
-var authApi standard.AuthAPI
+func Daemon(configRoot string, source string, peerId string) (*BlockchainAPI, []string, error) {
 
-func Initialization(url string, authWay string, role string) error {
-	if authWay == "" {
-		authWay = DefaultAuthWay
-	} else {
-		DefaultAuthWay = authWay
-	}
-	if role == "" {
-		role = DefaultRole
-	} else {
-		DefaultRole = role
-	}
-
-	switch authWay {
-	case AuthWayFabric:
-		switch role {
-		case RoleCore:
-			authApi = api.CoreAPI{}
-		case RoleLite:
-			authApi = api.LiteAPI{}
-		default:
-			return errUnknownRole
+	// todo 依赖注入
+	switch source {
+	case sourceFabric:
+		return nil, nil, fmt.Errorf("不支持的source：%s", source)
+	case sourceCosmos:
+		apiImplement, err := implement.NewApi(configRoot, peerId)
+		if err != nil {
+			return nil, nil, err
 		}
-		return api.Initialization(url)
+		api = &BlockchainAPI{
+			Peer:    apiImplement,
+			goCache: cache.New(cacheExpire, cacheClean),
+		}
+	case sourceMock:
+		api = &BlockchainAPI{
+			Peer:    &mock.MockPeerApi{},
+			goCache: cache.New(cacheExpire, cacheClean),
+		}
 	default:
-		return errUnknownAuthWay
+		return nil, nil, fmt.Errorf("不支持的source：%s", source)
 	}
+
+	err := api.DaemonPeer()
+	if err != nil {
+		return nil, nil, err
+	}
+	peerAddrList, err := GetBootStrap()
+	if err != nil {
+		return nil, nil, err
+	}
+	return api, peerAddrList, nil
+}
+
+func GetApiInfo() (*BlockchainAPI, error) {
+	if api == nil {
+		return nil, errInitFail
+	}
+	return api, errInitFail
 }
