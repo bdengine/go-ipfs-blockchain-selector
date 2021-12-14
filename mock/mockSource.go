@@ -36,7 +36,11 @@ func (p *MockPeerApi) DeleteFile(cid string) error {
 	return nil
 }
 
-func (p *MockPeerApi) GetPeerList() ([]model.CorePeer, error) {
+func (p *MockPeerApi) RechargeFile(cid string, days int64) error {
+	return nil
+}
+
+func (p *MockPeerApi) GetPeerList(num int) ([]model.CorePeer, error) {
 	peers := []model.CorePeer{{
 		PeerId:    "12D3KooWLUTBUkLnfdcJbyV1C7ZRsdFcDoN89mmYknFH5ef9pTyM",
 		Addresses: []string{"/ip4/172.19.17.12/tcp/4001/p2p/12D3KooWDaJ9JJezdx8vMJxxVEsysYBtcHdxUBoogGypQXfrqiEj"},

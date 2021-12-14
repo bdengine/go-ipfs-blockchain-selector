@@ -4,17 +4,18 @@ import (
 	"github.com/ipfs/go-ipfs-auth/standard/model"
 )
 
-func GetPeerList() ([]model.CorePeer, error) {
-	get, exist := api.goCache.Get(peerListKey)
+func GetPeerList(num int) ([]model.CorePeer, error) {
+	// todo 缓存？
+	/*get, exist := api.goCache.Get(peerListKey)
 	if !exist {
-		list, err := api.GetPeerList()
+		list, err := api.GetPeerList(num)
 		if err != nil {
 			return nil, err
 		}
 		err = api.goCache.Add(peerListKey, list, cacheExpire)
 		return list, err
-	}
-	return get.([]model.CorePeer), nil
+	}*/
+	return api.GetPeerList(num)
 }
 
 func AddFile(info model.IpfsFileInfo) error {
@@ -23,6 +24,10 @@ func AddFile(info model.IpfsFileInfo) error {
 
 func DeleteFile(info string) error {
 	return api.DeleteFile(info)
+}
+
+func RechargeFile(cid string, days int64) error {
+	return api.RechargeFile(cid, days)
 }
 
 func InitPeer(peer model.CorePeer) error {
@@ -52,7 +57,7 @@ func Mining(m []model.IpfsMining) error {
 func GetBootStrap() ([]string, error) {
 	boot, exist := api.goCache.Get(bootstrapListKey)
 	if !exist {
-		list, err := GetPeerList()
+		list, err := GetPeerList(10)
 		if err != nil {
 			return nil, err
 		}
