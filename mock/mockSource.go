@@ -52,7 +52,7 @@ func (p *MockPeerApi) GetPeerList(num int) ([]model.CorePeer, error) {
 }
 
 func (p *MockPeerApi) GetBootStrap() ([]string, error) {
-	list, err := p.GetPeerList()
+	list, err := p.GetPeerList(10)
 	if err != nil {
 		return nil, err
 	}
