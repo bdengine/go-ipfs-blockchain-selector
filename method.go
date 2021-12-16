@@ -46,8 +46,12 @@ func GetPeer(id string) (model.CorePeer, error) {
 	return api.GetPeer(id)
 }
 
-func GetChallenge() (string, error) {
-	return api.GetChallenge()
+func UpdateAddress(addrList []string) error {
+	return api.UpdateAddress(addrList)
+}
+
+func Heartbeat() error {
+	return api.Heartbeat()
 }
 
 func Mining(m []model.IpfsMining) error {

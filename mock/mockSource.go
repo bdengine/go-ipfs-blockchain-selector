@@ -86,3 +86,11 @@ func (p *MockPeerApi) GetChallenge() (string, error) {
 func (p *MockPeerApi) Mining([]model.IpfsMining) error {
 	return nil
 }
+
+func (p *MockPeerApi) UpdateAddress(addrList []string) error {
+	return nil
+}
+
+func (p *MockPeerApi) Heartbeat() error {
+	return nil
+}
