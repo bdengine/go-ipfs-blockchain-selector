@@ -83,7 +83,7 @@ func (p *MockPeerApi) GetChallenge() (string, error) {
 	return "", nil
 }
 
-func (p *MockPeerApi) Mining([]model.IpfsMining) error {
+func (p *MockPeerApi) Mining(model.IpfsMining) error {
 	return nil
 }
 

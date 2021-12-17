@@ -34,8 +34,8 @@ func InitPeer(peer model.CorePeer) error {
 	return api.InitPeer(peer)
 }
 
-func ReportContribute(num int64) error {
-	return nil
+func GetChallenge() (string, error) {
+	return api.GetChallenge()
 }
 
 func GetUserCode() (string, error) {
@@ -54,7 +54,7 @@ func Heartbeat() error {
 	return api.Heartbeat()
 }
 
-func Mining(m []model.IpfsMining) error {
+func Mining(m model.IpfsMining) error {
 	return api.Mining(m)
 }
 
