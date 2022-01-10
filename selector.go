@@ -9,10 +9,6 @@ import (
 	"time"
 )
 
-const (
-	AuthWayFabric = "fabric"
-)
-
 var errInitFail error = fmt.Errorf("权限模块初始化失败")
 
 type BlockchainAPI struct {
@@ -23,10 +19,8 @@ type BlockchainAPI struct {
 var api *BlockchainAPI
 
 const (
-	cacheExpire      = 2 * time.Hour
-	cacheClean       = 1 * time.Hour
-	peerListKey      = "keyPeerList"
-	bootstrapListKey = "keyBootstrap"
+	cacheExpire = 2 * time.Hour
+	cacheClean  = 1 * time.Hour
 )
 
 const (
@@ -36,7 +30,6 @@ const (
 )
 
 func Daemon(configRoot string, source string, peerId string) (*BlockchainAPI, []string, error) {
-
 	// todo 依赖注入
 	switch source {
 	case sourceFabric:
