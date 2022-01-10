@@ -58,19 +58,18 @@ func Mining(m model.IpfsMining) error {
 	return api.Mining(m)
 }
 
+func GetFileList(n int64) ([]string, error) {
+	return api.GetFileList(n)
+}
+
 func GetBootStrap() ([]string, error) {
-	boot, exist := api.goCache.Get(bootstrapListKey)
-	if !exist {
-		list, err := GetPeerList(10)
-		if err != nil {
-			return nil, err
-		}
-		var blist []string
-		for _, peer := range list {
-			blist = append(blist, peer.Addresses...)
-		}
-		err = api.goCache.Add(bootstrapListKey, blist, cacheExpire)
-		return blist, nil
+	list, err := GetPeerList(10)
+	if err != nil {
+		return nil, err
 	}
-	return boot.([]string), nil
+	var blist []string
+	for _, peer := range list {
+		blist = append(blist, peer.Addresses...)
+	}
+	return blist, nil
 }

@@ -94,3 +94,7 @@ func (p *MockPeerApi) UpdateAddress(addrList []string) error {
 func (p *MockPeerApi) Heartbeat() error {
 	return nil
 }
+
+func (p *MockPeerApi) GetFileList(n int64) ([]string, error) {
+	return nil, nil
+}
