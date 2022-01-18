@@ -2,7 +2,7 @@ package mock
 
 import (
 	"fmt"
-	"github.com/ipfs/go-ipfs-auth/standard/model"
+	"github.com/bdengine/go-ipfs-blockchain-standard/model"
 )
 
 type MockPeerApi struct{}

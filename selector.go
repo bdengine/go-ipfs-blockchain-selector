@@ -2,9 +2,9 @@ package selector
 
 import (
 	"fmt"
-	"github.com/ipfs/go-ipfs-auth/auth-source-eth/implement"
+	"github.com/bdengine/go-ipfs-blockchain-eth/implement"
+	_interface "github.com/bdengine/go-ipfs-blockchain-standard/interface"
 	"github.com/ipfs/go-ipfs-auth/selector/mock"
-	_interface "github.com/ipfs/go-ipfs-auth/standard/interface"
 	"github.com/patrickmn/go-cache"
 	"time"
 )
