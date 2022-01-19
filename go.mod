@@ -1,4 +1,4 @@
-module github.com/bdengine/go-ipfs-blockchain-eth
+module github.com/bdengine/go-ipfs-blockchain-selector
 
 go 1.15
 
