@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/bdengine/go-ipfs-blockchain-eth/implement"
 	_interface "github.com/bdengine/go-ipfs-blockchain-standard/interface"
-	"github.com/ipfs/go-ipfs-auth/selector/mock"
+	"github.com/bdengine/go-ipfs-blockchain-eth/mock"
 	"github.com/patrickmn/go-cache"
 	"time"
 )
