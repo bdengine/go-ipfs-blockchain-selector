@@ -9,6 +9,6 @@ require (
 )
 
 replace (
-	//github.com/bdengine/go-ipfs-blockchain-standard => ../go-ipfs-blockchain-standard
-	//github.com/bdengine/go-ipfs-blockchain-eth => ../go-ipfs-blockchain-eth
+	github.com/bdengine/go-ipfs-blockchain-standard => ../go-ipfs-blockchain-standard
+	github.com/bdengine/go-ipfs-blockchain-eth => ../go-ipfs-blockchain-eth
 )

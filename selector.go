@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/bdengine/go-ipfs-blockchain-eth/implement"
 	_interface "github.com/bdengine/go-ipfs-blockchain-standard/interface"
-	"github.com/bdengine/go-ipfs-blockchain-selector/mock"
+	//"github.com/bdengine/go-ipfs-blockchain-selector/mock"
 	"github.com/patrickmn/go-cache"
 	"time"
 )
@@ -29,15 +29,15 @@ const (
 	sourceMock   = "mock"
 )
 
-func Daemon(configRoot string, source string, peerId string) (*BlockchainAPI, []string, error) {
+func Daemon(configRoot string, source string, peerId string) (*BlockchainAPI, []string,[]string, error) {
 	// todo 依赖注入
 	switch source {
 	case sourceFabric:
-		return nil, nil, fmt.Errorf("不支持的source：%s", source)
+		return nil, nil,nil, fmt.Errorf("不支持的source：%s", source)
 	case sourceCosmos:
 		apiImplement, err := implement.NewApi(configRoot, peerId)
 		if err != nil {
-			return nil, nil, err
+			return nil, nil,nil, err
 		}
 		api = &BlockchainAPI{
 			Peer:    apiImplement,
@@ -45,27 +45,27 @@ func Daemon(configRoot string, source string, peerId string) (*BlockchainAPI, []
 		}
 	case sourceMock:
 		api = &BlockchainAPI{
-			Peer:    &mock.MockPeerApi{},
+			//Peer:    &mock.MockPeerApi{},
 			goCache: cache.New(cacheExpire, cacheClean),
 		}
 	default:
-		return nil, nil, fmt.Errorf("不支持的source：%s", source)
+		return nil, nil,nil, fmt.Errorf("不支持的source：%s", source)
 	}
 
-	err := api.DaemonPeer()
+	announce,err := api.DaemonPeer()
 	if err != nil {
-		return nil, nil, err
+		return nil, nil,nil, err
 	}
 	peerAddrList, err := GetBootStrap()
 	if err != nil {
-		return nil, nil, err
+		return nil, nil,nil, err
 	}
-	return api, peerAddrList, nil
+	return api, peerAddrList,announce, nil
 }
 
 func GetApiInfo() (*BlockchainAPI, error) {
 	if api == nil {
 		return nil, errInitFail
 	}
-	return api, errInitFail
+	return api, nil
 }

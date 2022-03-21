@@ -1,6 +1,7 @@
 package selector
 
 import (
+	"github.com/bdengine/go-ipfs-blockchain-standard/dto"
 	"github.com/bdengine/go-ipfs-blockchain-standard/model"
 )
 
@@ -54,8 +55,23 @@ func Heartbeat() error {
 	return api.Heartbeat()
 }
 
-func Mining(m model.IpfsMining) error {
+func Mining(m dto.MiningDTO) error {
 	return api.Mining(m)
+}
+
+func UpdateOrGen(m dto.StoreProofDTO) error {
+	return api.UpdateOrGen(m)
+}
+
+func Prove(m dto.SVProofDTO) error {
+	return api.Prove(m)
+}
+
+func GetChallengeStage() (int64,string,int64,error) {
+	return api.GetChallengeStage()
+}
+func GetStoreChallenge() (string,error) {
+	return api.GetStoreChallenge()
 }
 
 func GetFileList(n int64) ([]string, error) {
